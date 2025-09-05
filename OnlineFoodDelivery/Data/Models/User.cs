@@ -10,5 +10,6 @@ namespace OnlineFoodDelivery.Data.Models
         public bool isActive { get; set; } = true;
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
+        public ICollection<Orders> Orders { get; set; }
     }
 }
