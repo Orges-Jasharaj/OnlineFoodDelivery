@@ -7,5 +7,6 @@
         public const string Driver = "Driver";
         public const string Client = "Client";
         public const string Adminstrator = "Adminstrator";
+        public const string Owner = "Owner";
     }
 }
