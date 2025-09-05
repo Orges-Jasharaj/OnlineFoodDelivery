@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineFoodDelivery.Data;
 using OnlineFoodDelivery.Data.Models;
+using OnlineFoodDelivery.Dtos.Seed;
 using OnlineFoodDelivery.Dtos.System;
+using OnlineFoodDelivery.Middleware;
 using OnlineFoodDelivery.Services.Implimentation;
 using OnlineFoodDelivery.Services.Interface;
 using Serilog;
@@ -123,6 +125,8 @@ namespace OnlineFoodDelivery
 
             var app = builder.Build();
 
+            SeedData.InitializeAsync(app.Services).GetAwaiter().GetResult();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -133,6 +137,8 @@ namespace OnlineFoodDelivery
                     app.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API V1");
                 });
             }
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
