@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OnlineFoodDelivery.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OnlineFoodDelivery.Data.Models
+namespace OnlineFoodDelivery.Dtos.Responses
 {
-    public class Restaurant
+    public class RestaurantDto
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-
-        [ForeignKey("Owner")]
         public string OwnerId { get; set; }
         public User Owner { get; set; }
         public ICollection<Food> Foods { get; set; } = new List<Food>();

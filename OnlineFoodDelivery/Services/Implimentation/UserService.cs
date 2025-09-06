@@ -346,7 +346,7 @@ namespace OnlineFoodDelivery.Services.Implimentation
         {
             try
             {
-                var allowedRoles = new[] { RoleTypes.Adminstrator, RoleTypes.Driver };
+                var allowedRoles = new[] { RoleTypes.Adminstrator, RoleTypes.Driver , RoleTypes.Owner };
 
                 if (!allowedRoles.Contains(role))
                 {

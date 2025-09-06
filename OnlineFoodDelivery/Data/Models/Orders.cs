@@ -25,7 +25,6 @@ namespace OnlineFoodDelivery.Data.Models
         public DateTime CreatedAt { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

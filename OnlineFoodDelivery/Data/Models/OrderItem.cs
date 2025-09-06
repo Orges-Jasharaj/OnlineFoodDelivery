@@ -18,7 +18,7 @@ namespace OnlineFoodDelivery.Data.Models
         public Food Food { get; set; }
 
         public int Quantity { get; set; }
-        public double Price { get; set; } // Price = Food.Price * Quantity
+        public double Price { get; set; } // Price = Food.Price 
 
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }

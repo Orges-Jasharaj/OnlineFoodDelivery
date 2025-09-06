@@ -56,6 +56,7 @@ namespace OnlineFoodDelivery
 
             builder.Services.AddScoped<IUser , UserService>();  
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IRestaurant, RestaurantService>();
 
 
 
