@@ -9,6 +9,7 @@ using OnlineFoodDelivery.Data.Models;
 using OnlineFoodDelivery.Dtos.Seed;
 using OnlineFoodDelivery.Dtos.System;
 using OnlineFoodDelivery.Middleware;
+using OnlineFoodDelivery.Services.Implementation;
 using OnlineFoodDelivery.Services.Implimentation;
 using OnlineFoodDelivery.Services.Interface;
 using Serilog;
@@ -57,7 +58,11 @@ namespace OnlineFoodDelivery
             builder.Services.AddScoped<IUser , UserService>();  
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRestaurant, RestaurantService>();
-
+            builder.Services.AddScoped<IFood, FoodService>();
+            builder.Services.AddScoped<IOrder, OrderService>();
+            builder.Services.AddScoped<IReview, ReviewService>();
+            builder.Services.AddScoped<IPayment, PaymentService>();
+            builder.Services.AddScoped<IOrderItem, OrderItemService>();
 
 
 
