@@ -10,10 +10,10 @@ namespace OnlineFoodDelivery.Dtos.Responses
         public string Name { get; set; }
         public string Address { get; set; }
         public string OwnerId { get; set; }
-        public User Owner { get; set; }
+        //public User Owner { get; set; }
         public ICollection<Food> Foods { get; set; } = new List<Food>();
-        public ICollection<Orders> Orders { get; set; } = new List<Orders>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        //public ICollection<Orders> Orders { get; set; } = new List<Orders>();
+        //public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? UpdatedBy { get; set; }

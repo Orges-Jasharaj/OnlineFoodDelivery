@@ -20,8 +20,13 @@ namespace OnlineFoodDelivery.Services.Implimentation
 
 
 
-        public async Task<ResponseDto<bool>> AddFoodToRestaurant(int restaurantId, AddFoodToRestaurantDto addFood)
+        public async Task<ResponseDto<bool>> AddFoodToRestaurant(string ownerId,int restaurantId, AddFoodToRestaurantDto addFood)
         {
+            var owner = await _context.Users.FindAsync(ownerId);
+            if (owner == null)
+            {
+                return ResponseDto<bool>.Failure("Owner not found.");
+            }
             var food = await _context.Foods
                 .FirstOrDefaultAsync(f => f.Name.ToLower() == addFood.Name.ToLower() && f.RestaurantId == restaurantId);
             if (food != null)
@@ -91,8 +96,8 @@ namespace OnlineFoodDelivery.Services.Implimentation
                     Address = r.Address,
                     OwnerId = r.OwnerId,
                     Foods = r.Foods,
-                    Orders = r.Orders,
-                    Reviews = r.Reviews,
+                    //Orders = r.Orders,
+                    //Reviews = r.Reviews,
                     CreatedAt = r.CreatedAt,
                     CreatedBy = r.CreatedBy
                 })
@@ -111,8 +116,8 @@ namespace OnlineFoodDelivery.Services.Implimentation
                     Address = r.Address,
                     OwnerId = r.OwnerId,
                     Foods = r.Foods,
-                    Orders = r.Orders,
-                    Reviews = r.Reviews,
+                    //Orders = r.Orders,
+                    //Reviews = r.Reviews,
                     CreatedAt = r.CreatedAt,
                     CreatedBy = r.CreatedBy
                 })
@@ -127,6 +132,30 @@ namespace OnlineFoodDelivery.Services.Implimentation
             }
         }
 
+        public async Task<ResponseDto<RestaurantOrdersDto>> GetRestaurantOrders(string ownerId)
+        {
+            var owner = await _context.Users.FindAsync(ownerId);
+            if (owner == null)
+            {
+                return ResponseDto<RestaurantOrdersDto>.Failure("Owner not found.");
+            }
+            var restaurantOrders = await _context.Restaurants
+                .Where(r => r.OwnerId == ownerId)
+                .Select(r => new RestaurantOrdersDto
+                {
+                    RestaurantId = r.Id,
+                    RestaurantName = r.Name,
+                    TotalOrders = r.Orders.Count,
+                    Orders = r.Orders
+                })
+                .FirstOrDefaultAsync();
+            if (restaurantOrders == null)
+            {
+               return ResponseDto<RestaurantOrdersDto>.Failure("No restaurant found for this owner.");
+            }
+            return ResponseDto<RestaurantOrdersDto>.SuccessResponse(restaurantOrders, "Restaurant orders retrieved successfully.");
+        }
+
         public async Task<ResponseDto<List<RestaurantDto>>> GetRestaurantsByOwnerIdAsync(string ownerId)
         {
             var restaurants = await _context.Restaurants
@@ -138,13 +167,42 @@ namespace OnlineFoodDelivery.Services.Implimentation
                     Address = r.Address,
                     OwnerId = r.OwnerId,
                     Foods = r.Foods,
-                    Orders = r.Orders,
-                    Reviews = r.Reviews,
+                    //Orders = r.Orders,
+                    //Reviews = r.Reviews,
                     CreatedAt = r.CreatedAt,
                     CreatedBy = r.CreatedBy
                 })
                 .ToListAsync();
             return ResponseDto<List<RestaurantDto>>.SuccessResponse(restaurants, "Restaurants retrieved successfully.");
+        }
+
+        public async Task<ResponseDto<bool>> UpdatePriceOfFood(UpdatePriceOfFoodDto updatePriceOfFoodDto)
+        {
+            var owner = await _context.Users.FindAsync(updatePriceOfFoodDto.OwnerId);
+            if (owner == null)
+            {
+                return ResponseDto<bool>.Failure("Owner not found.");
+            }
+            var restaurant = await _context.Restaurants.FindAsync(updatePriceOfFoodDto.RestaurantId);
+            if (restaurant == null || restaurant.OwnerId != updatePriceOfFoodDto.OwnerId)
+            {
+                return ResponseDto<bool>.Failure("Restaurant not found or you are not the owner of this restaurant.");
+            }
+            var food = await _context.Foods.FindAsync(updatePriceOfFoodDto.FoodId);
+            if (food == null)
+            {
+                return ResponseDto<bool>.Failure("Food not found.");
+            }
+            food.RestaurantId = updatePriceOfFoodDto.RestaurantId;
+            food.Id = updatePriceOfFoodDto.FoodId;
+            food.Price = updatePriceOfFoodDto.NewPrice;
+            food.UpdatedAt = updatePriceOfFoodDto.UpdatedAt == default ? DateTime.Now : updatePriceOfFoodDto.UpdatedAt;
+            food.UpdatedBy = updatePriceOfFoodDto.UpdatedBy;
+            _context.Foods.Update(food);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Food {food.Name} price updated successfully.");
+            return ResponseDto<bool>.SuccessResponse(true, "Food price updated successfully.");
+
         }
 
         public async Task<ResponseDto<bool>> UpdateRestaurantAsync(int id, CreateRestaurantDto updateRestaurantDto)

@@ -11,8 +11,9 @@ namespace OnlineFoodDelivery.Services.Interface
         Task<ResponseDto<bool>> UpdateRestaurantAsync(int id, CreateRestaurantDto updateRestaurantDto);
         Task<ResponseDto<bool>> DeleteRestaurantAsync(int id);
         Task<ResponseDto<List<RestaurantDto>>> GetRestaurantsByOwnerIdAsync(string ownerId);
-        Task<ResponseDto<bool>> AddFoodToRestaurant(int restaurantId, AddFoodToRestaurantDto addFood);
-
+        Task<ResponseDto<bool>> AddFoodToRestaurant(string ownerId, int restaurantId, AddFoodToRestaurantDto addFood);
+        Task<ResponseDto<bool>> UpdatePriceOfFood(UpdatePriceOfFoodDto updatePriceOfFoodDto);
+        Task<ResponseDto<RestaurantOrdersDto>> GetRestaurantOrders(string ownerId);
 
     }
 }

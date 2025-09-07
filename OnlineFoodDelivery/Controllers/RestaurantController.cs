@@ -76,7 +76,34 @@ namespace OnlineFoodDelivery.Controllers
             }
             addFood.CreatedBy = userId;
             addFood.CreatedAt = DateTime.UtcNow;
-            return Ok(await _restaurant.AddFoodToRestaurant(restaurantId, addFood));
+            return Ok(await _restaurant.AddFoodToRestaurant(userId,restaurantId, addFood));
+        }
+
+        
+        [HttpPut("updateFoodPrice")]
+        public async Task<IActionResult> UpdatePriceOfFood([FromBody] Dtos.Requests.UpdatePriceOfFoodDto updatePriceOfFoodDto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+            updatePriceOfFoodDto.OwnerId = userId;
+            updatePriceOfFoodDto.UpdatedBy = userId;
+            updatePriceOfFoodDto.UpdatedAt = DateTime.UtcNow;
+            return Ok(await _restaurant.UpdatePriceOfFood(updatePriceOfFoodDto));
+        }
+
+
+        [HttpGet("getRestaurantOrders")]
+        public async Task<IActionResult> GetRestaurantOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+            return Ok(await _restaurant.GetRestaurantOrders(userId));
         }
 
 

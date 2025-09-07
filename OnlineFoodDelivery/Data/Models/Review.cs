@@ -16,7 +16,6 @@ namespace OnlineFoodDelivery.Data.Models
         [ForeignKey("Restaurant")]
         public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }
-
         public int Rating { get; set; } // 1-5
         public string Comment { get; set; }
 
